@@ -1,0 +1,7 @@
+!.gitignore
+.env
+temp/*
+tempImagePath/*
+index.php
+index.html
+runtime/*
