@@ -1,0 +1,74 @@
+<?php
+namespace Suxianjia\xianjiamessagepush\driver;
+use Suxianjia\xianjiamessagepush\driver\BaseSmsDriver;
+use Suxianjia\xianjiamessagepush\myConfig;
+/**
+ * 日志短信驱动（用于测试）
+ * 将短信内容写入日志而不是真实发送
+ */
+class LogSmsDriver extends BaseSmsDriver
+{
+    /**
+     * 日志文件路径
+     * @var string
+     */
+    protected $logFile;
+
+    /**
+     * 构造函数
+     */
+    protected function __construct()
+    {
+        parent::__construct();
+        // 默认日志文件路径
+        $this->logFile = dirname(__DIR__, 2) . '/runtime/sms.log';
+    }
+
+    /**
+     * 发送短信（写入日志）
+     * @param string $phone 手机号
+     * @param string $content 短信内容
+     * @param array $options 额外的配置选项
+     * @return bool 发送结果
+     */
+    public function send(string $phone, string $content, array $options = []): bool
+    {
+        try {
+            // 确保日志目录存在
+            $logDir = dirname($this->logFile);
+            if (!is_dir($logDir)) {
+                mkdir($logDir, 0755, true);
+            }
+
+            // 构建日志内容
+            $logContent = sprintf(
+                "[%s] Phone: %s, Content: %s, Options: %s\n",
+                date('Y-m-d H:i:s'),
+                $phone,
+                $content,
+                json_encode($options, JSON_UNESCAPED_UNICODE)
+            );
+
+            // 写入日志
+            if (file_put_contents($this->logFile, $logContent, FILE_APPEND | LOCK_EX) === false) {
+                throw new \RuntimeException('Failed to write SMS log');
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->setError($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 设置日志文件路径
+     * @param string $path 日志文件路径
+     * @return self
+     */
+    public function setLogFile(string $path): self
+    {
+        $this->logFile = $path;
+        return $this;
+    }
+}

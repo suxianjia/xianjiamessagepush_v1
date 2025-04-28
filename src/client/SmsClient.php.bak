@@ -1,0 +1,102 @@
+<?php
+
+namespace Suxianjia\xianjiamessagepush\client;
+
+ use Suxianjia\xianjiamessagepush\client\Command;
+use Suxianjia\xianjiamessagepush\service\SmsService ;
+
+class SmsClient extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *  yx-dev@Mac code.rpc.upetrol.net % php82 artisan  app:sms-client      
+     * 
+     * @var string
+     */
+    protected $signature = 'app:sms-client';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description php82 artisan  app:sms-client       ';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        //
+       $client = new SmsService();
+
+       // // 'code' => $message[0],
+
+       $templateParam = [
+           'code' => '123456',
+       ];
+//php82 artisan  app:sms-client  
+    //    $res = $client -> sendSms( ['15208951710','13307621700'],['123452','123452'] ,'verifycode' );
+    //   $res = $client -> sendSms( ['15208951710'],$templateParam ,'verifycode' );
+    //  var_dump($res);
+    ///*22*/  'fans-buy-notification'                             => ["粉丝购买通知推广员","SMS_275785173","通知", "您的粉丝 $\{user_nickname} 在商城消费 $\{order_payment_amount},  消费时间：$\{order_add_time}，订单编号：$\{order_id} ，订单名称：$\{product_name}。",'status=0'],
+   
+    $templateParam = [
+        'user_nickname' => '小明',
+        'order_payment_amount' => '100.00',
+        'order_add_time'=> '2025-01-01 12:00:00',
+        'order_id' => '123456789',
+        'product_name' => 'A商品'
+    ];
+
+    // $res = $client -> sendSms( ['15808902204'],$templateParam ,'fans-buy-notification' );
+    //     $this->info( json_encode($res) );
+    // }
+
+
+    ///*02*/  'platform-customer-service-reply-reminder'          =>["平台客服回复提醒","2396630","通知", "您的平台客服咨询已经回复，可去会员中心查看详情。",'status=0'],
+    ///*02*/  'platform-customer-service-reply-reminder'          =>["平台客服回复提醒","SMS_275765183","通知", "您的平台客服咨询已经回复，可去会员中心查看详情。",'status=0'],
+
+    $templateParam = [
+    
+    ];
+
+    // $res = $client -> sendSms( ['15808902204'],$templateParam ,'platform-customer-service-reply-reminder' );
+    //     $this->info( json_encode($res) );
+    // }
+// /*11*/   'return-reminder'                                  =>["退货提醒","SMS_275795164","通知", "您有一个退款单需要处理，退款编号：$\{order_id},快去查看。",'status=0'],
+$templateParam = [
+    "order_id"=> '123456789',
+];
+$phone = ['13307621700'];
+
+// $res = $client -> sendSms( $phone ,$templateParam ,'return-reminder' );
+//     $this->info( json_encode($res) );
+// }
+///*19*/  'ordor_complete_shipping'                           =>["发货通知","SMS_276030065","通知", "您的订单$\{order_id}于$\{date}时,已发货啦~",'status=0'],
+$templateParam = [
+    "order_id"=> '123456789',
+    "date"=> '2025-01-01 12:00:00',
+];
+// $phone = ['15208951710'];
+$Pcode ='+86';
+
+
+// /*36*/  'registration-of-welcome-information'               =>["注册欢迎信息","SMS_482715199","通知类","感谢您注册$\{site_name}，欢迎您。",'status=1'],//不通过
+$phone = ['+8615208951710' ,'+8613307621700' ,'+8615808902204'];
+$phone = ['+8615208951710'];
+$phone = ['+8615808902204'];
+// $phone = ['+8613307621700'];
+$templateParam = [
+    "site_name"=> '优选石油',
+];//  参数的顺序不可以打乱   【阿里云模板不通过， 腾讯云已经通过】
+$msgtype = 'registration-of-welcome-information';
+
+ 
+
+$res = $client -> sendSms( $phone ,$templateParam ,$msgtype  );
+    $this->info( json_encode($res) );
+}
+
+
+}

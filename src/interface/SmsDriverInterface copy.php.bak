@@ -1,0 +1,37 @@
+<?php
+namespace framework\interface;
+
+/**
+ * 短信驱动接口
+ * 使用单例模式确保全局只有一个短信驱动实例
+ */
+interface SmsDriverInterface
+{
+    /**
+     * 获取短信驱动实例（单例模式）
+     * @return static
+     */
+    public static function getInstance(): self;
+    
+    /**
+     * 发送短信
+     * @param string $phone 手机号
+     * @param string $content 短信内容
+     * @param array $options 额外的配置选项
+     * @return bool 发送结果
+     */
+    public function send(string $phone, string $content, array $options = []): bool;
+    
+    /**
+     * 获取最后一次发送的错误信息
+     * @return string|null
+     */
+    public function getLastError(): ?string;
+    
+    /**
+     * 设置配置信息
+     * @param array $config 配置数组
+     * @return self
+     */
+    public function setConfig(array $config): self;
+}
